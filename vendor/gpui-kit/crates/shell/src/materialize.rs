@@ -539,6 +539,10 @@ struct Behavior {
     /// which is the one place a retained script closure would put the VM back
     /// on the frame path.
     tooltip: Option<SharedString>,
+    /// HERDR: the window button this element stands for. Windows then treats
+    /// it as its own caption button, which is what shows Snap Layouts when
+    /// the pointer rests on maximize.
+    window_control: Option<gpui::WindowControlArea>,
     /// How long the pointer rests on a `HoverCard`'s trigger before it appears,
     /// and how long it may leave before it goes away.
     open_delay: Option<Duration>,
@@ -593,6 +597,7 @@ impl Behavior {
     fn needs_identity(&self) -> bool {
         self.focus_handle.is_some()
             || self.tooltip.is_some()
+            || self.window_control.is_some()
             || self.tab_index.is_some()
             || self.tab_stop.is_some()
             || self.role.is_some()
@@ -2229,6 +2234,9 @@ fn flex_element(
             }
         });
     }
+    if let Some(area) = behavior.window_control {
+        stateful = stateful.window_control_area(area);
+    }
     let stateful = components::tooltip::with_tooltip(stateful, &behavior, window);
     let scroll_handle = behavior.virtual_scroll.and_then(|handle| runtime.entities().scroll(handle));
     if behavior.scrollbar {
@@ -3254,6 +3262,17 @@ pub(crate) const ANCHOR_NAMES: [&str; 8] = [
     "right_center",
 ];
 
+/// HERDR: the window button a script named, or `None` if no variant spells it.
+fn window_control_from_name(name: &str) -> Option<gpui::WindowControlArea> {
+    match name {
+        "drag" => Some(gpui::WindowControlArea::Drag),
+        "min" => Some(gpui::WindowControlArea::Min),
+        "max" => Some(gpui::WindowControlArea::Max),
+        "close" => Some(gpui::WindowControlArea::Close),
+        _ => None,
+    }
+}
+
 /// The anchor a script named, or `None` if no variant spells it.
 pub(crate) fn anchor_from_name(name: &str) -> Option<gpui::Anchor> {
     match name {
@@ -3635,6 +3654,12 @@ fn apply_behavior(behavior: &mut Behavior, name: &str, args: &[Bridged]) {
                 .first()
                 .and_then(|value| value.as_str().ok())
                 .map(SharedString::from);
+        }
+        "window_control" => {
+            behavior.window_control = args
+                .first()
+                .and_then(|value| value.as_str().ok())
+                .and_then(|value| window_control_from_name(value));
         }
         "open_delay" => behavior.open_delay = milliseconds(args),
         "close_delay" => behavior.close_delay = milliseconds(args),

@@ -549,6 +549,18 @@ fn tabs_leave_room_for_macos_traffic_lights(cx: &mut TestAppContext) {
 }
 
 #[gpui::test]
+fn tab_window_buttons_are_caption_buttons(cx: &mut TestAppContext) {
+    cx.update(gpui_shell::init);
+    let staged = Staged::new();
+    let mut values = fixture(true, props(), updates("current", "current"));
+    values.insert("window".into(), json!({"platform":"windows","buttons":true,"maximized":false}));
+    let tree = describe_with_values(cx, &staged, "mods/tabs", values, None).unwrap();
+    for area in ["min", "max", "close"] {
+        assert!(tree.contains(&format!(":window_control[Str(\"{area}\")]")), "{area}: {tree}");
+    }
+}
+
+#[gpui::test]
 fn windows_tab_buttons_use_matching_vector_icons(cx: &mut TestAppContext) {
     cx.update(gpui_shell::init);
     let staged = Staged::new();

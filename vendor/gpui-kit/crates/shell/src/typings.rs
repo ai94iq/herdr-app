@@ -1641,6 +1641,13 @@ const ELEMENT_METHODS: &str = r#"    /**
      * announces the label; the tooltip is for the pointer.
      */
     tooltip<Self extends Element>(this: Self, text: string): Self;
+    /**
+     * Makes this element one of the window's own buttons where the system
+     * draws none (`window().buttons`). On Windows it then acts as the real
+     * caption button: resting the pointer on `"max"` shows Snap Layouts.
+     * Keep the element's click handler; other systems ignore this.
+     */
+    window_control<Self extends Element>(this: Self, area: "min" | "max" | "close" | "drag"): Self;
     /** Blocks activation and reports the disabled state. Draw it yourself. */
     disabled<Self extends Element>(this: Self, value: boolean): Self;
     /** Reports the selected state of a `Button`. */
@@ -4074,6 +4081,7 @@ mod tests {
         "checked",
         "accessibility_label",
         "tooltip",
+        "window_control",
         "role",
         "aria_selected",
         "aria_active_descendant",

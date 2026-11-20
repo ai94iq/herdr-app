@@ -58,7 +58,7 @@ function own(el) {
   return el.on_mouse_down("left", (_e, cx) => cx.stop_propagation()).on_mouse_down("right", (_e, cx) => cx.stop_propagation());
 }
 
-function windowButton(id, icon, command) {
+function windowButton(id, icon, command, area) {
   return own(
     div()
       .id(id)
@@ -73,6 +73,7 @@ function windowButton(id, icon, command) {
       .text_color(C.dim)
       .cursor_pointer()
       .hover((s) => s.bg(C.edge).text_color(C.text))
+      .window_control(area)
       .on_click(() => run(command))
       .child(svg(`mods/terminals-bar/${icon}.svg`).size(14)),
   );
@@ -179,9 +180,9 @@ export default class TerminalsBar extends View {
             .pl(6)
             .pr(4)
             .gap(8)
-            .child(windowButton("tm-min", "win-min", "window.minimize"))
-            .child(windowButton("tm-max", w.maximized ? "win-restore" : "win-max", "window.maximize"))
-            .child(windowButton("tm-close", "win-close", "window.close")),
+            .child(windowButton("tm-min", "win-min", "window.minimize", "min"))
+            .child(windowButton("tm-max", w.maximized ? "win-restore" : "win-max", "window.maximize", "max"))
+            .child(windowButton("tm-close", "win-close", "window.close", "close")),
         ),
       );
   }

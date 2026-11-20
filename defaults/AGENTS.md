@@ -260,7 +260,9 @@ Properties any node can have:
   draws its own (a bar mod in a `window_drag` block). macOS keeps its window
   buttons over the layout at `"traffic_lights": [x, y]` (px); leave them
   room. Where the system draws no buttons (`window().buttons`, Linux and
-  Windows), the bar draws them with `window.minimize`, `window.maximize`, `window.close`.
+  Windows), the bar draws them with `window.minimize`, `window.maximize`, `window.close`,
+  and marks each with `.window_control("min" | "max" | "close")` so Windows treats
+  them as its own caption buttons (Snap Layouts on hovering maximize).
   Windows' shipped tab bar and system strip use vector window icons, with a
   restore icon when maximized, rather than font glyphs.
 - Root only: `"window_blur": true` blurs what's behind the window where the

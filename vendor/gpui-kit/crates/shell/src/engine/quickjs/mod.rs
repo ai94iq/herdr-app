@@ -7480,6 +7480,7 @@ impl ShellRuntime {
                 "checked",
                 "accessibility_label",
                 "tooltip",
+                "window_control",
                 "role",
                 "aria_selected",
                 "aria_active_descendant",
@@ -8511,6 +8512,7 @@ impl ShellRuntime {
             | "checked"
             | "accessibility_label"
             | "tooltip"
+            | "window_control"
             | "role"
             | "aria_selected"
             | "aria_active_descendant"
@@ -8568,6 +8570,7 @@ impl ShellRuntime {
                     "selected" => "selected",
                     "checked" => "checked",
                     "tooltip" => "tooltip",
+                    "window_control" => "window_control",
                     "role" => "role",
                     "aria_selected" => "aria_selected",
                     "aria_active_descendant" => "aria_active_descendant",
